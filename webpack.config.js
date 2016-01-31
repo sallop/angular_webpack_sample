@@ -16,7 +16,10 @@ module.exports = {
     loaders: [
       { test: /\.scss$/, loader: 'style!css!sass' },
       { test: /\.css/, loader: "style!css" },
-      { test: /\.ts/, loader: "ts" },
+      { test: /\.js/,
+        loader: "ng-annotate!babel?presets[]=es2015!jshint",
+        exclude: /node_module|bower_components/
+      },
     ]
   },
   plugins: [
