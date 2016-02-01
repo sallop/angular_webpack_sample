@@ -7,6 +7,8 @@ var APP = __dirname + '/src';
 module.exports = {
   //entry: "./src/main.js",
   context: APP,
+  //devTool: "source-map",
+  devtool: "source-map",
   entry: ["webpack/hot/dev-server", "./core/bootstrap.js"],
   output: {
     path: './build',
