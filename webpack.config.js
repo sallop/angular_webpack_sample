@@ -9,7 +9,10 @@ module.exports = {
   context: APP,
   //devTool: "source-map",
   devtool: "source-map",
-  entry: ["webpack/hot/dev-server", "./core/bootstrap.js"],
+  entry: {
+    app: ["webpack/hot/dev-server", "./core/bootstrap.js"],
+    vendor: ["angular"]
+  },
   output: {
     path: './build',
     filename: "bundle.js"
@@ -25,6 +28,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.optimize.CommonsChunkPlugin("vendor","vendor.bundle.js")
   ]
 };

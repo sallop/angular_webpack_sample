@@ -1,5 +1,11 @@
-module.exports = angular.module('app', []);
+//module.exports = angular.module('app', [])
+var app = angular.module('app', []);
 
+app.controller('FooCtrl', function($scope){
+  $scope.name = "If I didn't say anything, people always assumed the worst.";
+});
+
+app.controller('BarCtrl', require('./barCtrl.js'));
 // default params
 function printMessage(status='working'){
   // let
@@ -9,3 +15,5 @@ function printMessage(status='working'){
 }
 
 printMessage();
+
+module.exports = app;
