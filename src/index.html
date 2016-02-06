@@ -4,6 +4,13 @@
   </head>
   <body>
     <p>Angular is working: {{ 1 + 1 === 2}}</p>
+    <script type="text/javascript" src="vendor.bundle.js" charset="utf-8"></script>
     <script type="text/javascript" src="bundle.js" charset="utf-8"></script>
+    <div ng-controller="FooCtrl">
+      {{name}}
+    </div>
+    <div ng-controller="BarCtrl">
+      {{name}}
+    </div>
   </body>
 </html>
