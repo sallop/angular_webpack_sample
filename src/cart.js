@@ -21,12 +21,20 @@ m.value("catalogItems", [
 
 // Actions
 var ADD_ITEM = "ADD_ITEM";
+var REMOVE_ITEM = "REMOVE_ITEM";
 
 m.factory("cartActions", function(dispatcher){
   return {
     addItem(item){
       dispatcher.emit({
         actionType: ADD_ITEM,
+        item: item
+      });
+    },
+    
+    removeItem(item){
+      dispatcher.emit({
+        actionType: REMOVE_ITEM,
         item: item
       });
     }
@@ -120,8 +128,9 @@ class CartCtrl {
     this.items = this.cartStore.cartItems();
   }
 
-  remoteItem(item){
+  removeItem(item){
     // to be implemented
+    this.cartActions.removeItem(item);
   }
 }
 
