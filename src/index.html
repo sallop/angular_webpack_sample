@@ -6,11 +6,30 @@
     <p>Angular is working: {{ 1 + 1 === 2}}</p>
     <script type="text/javascript" src="vendor.bundle.js" charset="utf-8"></script>
     <script type="text/javascript" src="bundle.js" charset="utf-8"></script>
-    <div ng-controller="FooCtrl">
+    <!--div ng-controller="FooCtrl">
       {{name}}
     </div>
     <div ng-controller="BarCtrl">
       {{name}}
-    </div>
+    </div-->
+    <table ng-controller="CatalogCtrl as catalog">
+      <tr ng-repeat="item in catalog.catalogItems">
+        <td>{{item.title}}</td>
+        <td>{{item.cost}}</td>
+        <td>
+          <button ng-click="catalog.addToCart(item)">Add to Cart</button>
+        </td>
+      </tr>
+    </table>
+    <h1>Cart</h1>
+    <table ng-controller="CartCtrl as cart">
+      <tr ng-repeat="item in cart.items track by $id(item)">
+        <td>{{item.catalogItem.title}}</td>
+        <td>{{item.qty}}</td>
+        <td>
+          <button ng-click="cart.removeItem(item)">x</button>
+        </td>
+      </tr>
+    </table>
   </body>
 </html>
