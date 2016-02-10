@@ -46,16 +46,20 @@ gulp.task('webpack-stream', function(){
     .pipe(gulp.dest('build/'));
 });
 
-gulp.task('webpack-dev-serve', function(callback){
+gulp.task('webpack-dev-serve', function(){
   //var compiler = webpack( require('./webpack.config.js'), function(){});
   var compiler = webpack({
+    //watch: true,
+    cache: true,
     context: __dirname,
     entry: {
       bundle: ['webpack/hot/dev-server', './src/core/bootstrap.js'],
       vendor: ['angular']
     },
     output: {
-      path: './build',
+      // note: https://github.com/webpack/webpack-dev-server/issues/88
+      // Error: Invalid path
+      path: require('path').resolve('./build'),
       filename: '[name].js'
     },
     module: {
@@ -72,25 +76,42 @@ gulp.task('webpack-dev-serve', function(callback){
       new webpack.HotModuleReplacementPlugin(),
       new webpack.optimize.CommonsChunkPlugin("vendor", "vendor.bundle.js")
     ]
-  }, function(err, stats){
-    if(err) throw new gutil.PluginError("webpack", err);
-    gutil.log("[webpack]", stats.toString({
-      // output options
-    }));
-    callback();
   });
+  //compiler.watch({
+  //  aggregateTimeout: 300,
+  //  poll: true
+  //}, function(err, stats){
+  //  if(err) throw new gutil.PluginError("webpack", err);
+  //  gutil.log("[webpack]", stats.toString({
+  //    // output options
+  //  }));
+  //});
 
   // not work
-  //var server = new WebpackDevServer(compiler, {
-  //  contentBase: "./build",
-  //  hot: true,
-  //  filename: "bundle.js"
-  //});
-  //server.listen(8080, "localhost", function(err){
-  //  if(err) throw new gutil.PluginError("webpack-dev-server", err);
-  //  gutil.log("[webpack-dev-server]",
-  //    "http://localhost:8000/webpack-dev-server/index.html");
-  //});
+  var server = new WebpackDevServer(compiler, {
+    contentBase: require('path').resolve("./build"),
+    hot: true,
+    historyApiFallback: false,
+    //proxy: {
+    //  "*": "http://localhost:9090"
+    //},
+    //quiet: false,
+    //noInfo: false,
+    //lazy: true,
+    //filename: "bundle.js",
+    //watchOptions: {
+    //  aggregateTimeout: 300,
+    //  poll: 1000
+    //},
+    //publicPath: "/assets/",
+    //headers: {"X-Custom-Header":"yes"},
+    //stats: { color: true },
+  });
+  server.listen(8080, "localhost", function(err){
+    if(err) throw new gutil.PluginError("webpack-dev-server", err);
+    gutil.log("[webpack-dev-server]",
+      "http://localhost:8080/webpack-dev-server/index.html");
+  });
 });
 
 gulp.task('html', function(){
