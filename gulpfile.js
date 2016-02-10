@@ -1,13 +1,24 @@
 var gulp = require('gulp');
+var clean = require('gulp-clean');
 var gutil = require('gulp-util');
 var webpack = require('webpack');
 var gulpWebpack = require('webpack-stream');
 var WebpackDevServer = require("webpack-dev-server");
+var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+
+var browserSync = require('browser-sync').create();
+
+var sources = {
+  html: ['src/**/*.html'],
+  js: ['src/**/*.js'],
+  css: ['src/**/*.css','src/**/*.scss'],
+  dist: ['build/bundle.js']
+};
 
 gulp.task('webpack-stream', function(){
   return gulp.src('src/core/bootstrap.js')
     .pipe(gulpWebpack({
-      watch: false,
+      watch: true,
       devtool: "source-map",
       entry: {
         bundle: ["webpack/hot/dev-server","./src/core/bootstrap.js"],
@@ -83,6 +94,31 @@ gulp.task('webpack-dev-serve', function(callback){
 });
 
 gulp.task('html', function(){
-  gulp.src('src/index.html')
-    .pipe(gulp.dest('build'));
+  gulp.src('src/**/*.html')
+    .pipe(gulp.dest('build'))
+    .pipe(browserSync.stream());
+});
+
+gulp.task('html-watch', ['html'], browserSync.reload);
+
+gulp.task('browser-sync', function(){
+  browserSync.init({
+    server: {
+      baseDir: './build'
+    }
+  });
+  gulp.watch(sources.html, ['html-watch']);
+  // not work. It may need browserSync.stream()
+  //gulp.watch(sources.html).on("change", browserSync.reload);
+  gulp.watch(sources.dist).on('change', browserSync.reload);
+  //not work. When a change event emit, build/bundle.js haven't compiled yet.
+  //gulp.watch(sources.js).on('change', browserSync.reload);
+  //gulp.watch(sources.css).on('change', browserSync.reload);
+});
+
+gulp.task('default', ['html', 'webpack-stream', 'browser-sync']);
+
+gulp.task('clean', function(){
+  gulp.src(['build/*.js', 'build/*.map', 'build/*.json'], { read: false })
+      .pipe(clean());
 });
