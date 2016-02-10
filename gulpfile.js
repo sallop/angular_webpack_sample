@@ -35,18 +35,51 @@ gulp.task('webpack-stream', function(){
     .pipe(gulp.dest('build/'));
 });
 
-gulp.task('webpack', function(callback){
-  // run webpack
-  webpack(
-    // configuration
-    require('./webpack.config.js')
-  , function(err, stats){
+gulp.task('webpack-dev-serve', function(callback){
+  //var compiler = webpack( require('./webpack.config.js'), function(){});
+  var compiler = webpack({
+    context: __dirname,
+    entry: {
+      bundle: ['webpack/hot/dev-server', './src/core/bootstrap.js'],
+      vendor: ['angular']
+    },
+    output: {
+      path: './build',
+      filename: '[name].js'
+    },
+    module: {
+      loaders: [
+        { test: /\.scss$/, loader: 'style!css!sass' },
+        { test: /\.css/, loader: "style!css" },
+        { test: /\.js/,
+          loader: "ng-annotate!babel?presets[]=es2015!jshint",
+          exclude: /node_module|bower_components/
+        },
+      ]
+    },
+    plugins: [
+      new webpack.HotModuleReplacementPlugin(),
+      new webpack.optimize.CommonsChunkPlugin("vendor", "vendor.bundle.js")
+    ]
+  }, function(err, stats){
     if(err) throw new gutil.PluginError("webpack", err);
     gutil.log("[webpack]", stats.toString({
       // output options
     }));
     callback();
   });
+
+  // not work
+  //var server = new WebpackDevServer(compiler, {
+  //  contentBase: "./build",
+  //  hot: true,
+  //  filename: "bundle.js"
+  //});
+  //server.listen(8080, "localhost", function(err){
+  //  if(err) throw new gutil.PluginError("webpack-dev-server", err);
+  //  gutil.log("[webpack-dev-server]",
+  //    "http://localhost:8000/webpack-dev-server/index.html");
+  //});
 });
 
 gulp.task('html', function(){
