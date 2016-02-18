@@ -1,5 +1,5 @@
 // Karma configuration
-// Generated on Fri Feb 12 2016 10:34:46 GMT+0900 (JST)
+// Generated on Thu Feb 18 2016 09:48:26 GMT+0900 (JST)
 
 module.exports = function(config) {
   config.set({
@@ -19,7 +19,7 @@ module.exports = function(config) {
       'node_modules/angular-mocks/angular-mocks.js',
       'node_modules/events/events.js',
       'src/index.js',
-      'test/**/*Spec.js'
+      'test/spec/helloSpec.js'
     ],
 
 
@@ -31,9 +31,28 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+      'test/spec/helloSpec.js': ['babel'],
+      'src/index.js': ['babel'],
     },
 
-    
+    babelPreprocessor: {
+      options: {
+        presets: ['es2015'],
+        sourceMap: 'inline'
+      },
+    },
+
+    plugins: [
+      //'karma-jasmine',
+      //'karma-phantomjs-launcher',
+      //'karma-babel-preprocessor',
+      require("karma-jasmine"),
+      require('karma-phantomjs-launcher'),
+      require('karma-babel-preprocessor')
+      //require("karma-webpack"),
+    ],
+
+
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
@@ -59,7 +78,6 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    //browsers: ['Chrome'],
     browsers: ['PhantomJS'],
 
 
