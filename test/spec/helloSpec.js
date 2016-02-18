@@ -280,7 +280,7 @@ describe("A spy, when configured with an alternate implementation", function(){
   });
 });
 
-describe("A spy, when configured to throw an error", function(){
+xdescribe("A spy, when configured to throw an error", function(){
   var foo, bar;
 
   beforeEach(function(){
