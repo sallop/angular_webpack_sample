@@ -17,95 +17,16 @@ var sources = {
 
 gulp.task('webpack-stream', function(){
   return gulp.src('src/core/bootstrap.js')
-    .pipe(gulpWebpack({
-      watch: true,
-      devtool: "source-map",
-      entry: {
-        bundle: ["webpack/hot/dev-server","./src/core/bootstrap.js"],
-        vendor: ["angular"]
-      },
-      output: {
-      // http://webpack.github.io/docs/configuration.html
-        filename: '[name].js',
-      },
-      module: {
-        loaders: [
-          { test: /\.scss$/, loader: 'style!css!sass' },
-          { test: /\.css$/ , loader: 'style!css' },
-          { test: /\.js$/  ,
-            loader: 'ng-annotate!babel?presets[]=es2015!jshint',
-            exclude: /node_module|bower_components/
-          }
-        ]
-      },
-      plugins: [
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.optimize.CommonsChunkPlugin("vendor", "vendor.bundle.js")
-      ]
-    }))
+    .pipe(gulpWebpack(require('./webpack.config.js')))
     .pipe(gulp.dest('build/'));
 });
 
 gulp.task('webpack-dev-serve', function(){
-  //var compiler = webpack( require('./webpack.config.js'), function(){});
-  var compiler = webpack({
-    //watch: true,
-    cache: true,
-    context: __dirname,
-    entry: {
-      bundle: ['webpack/hot/dev-server', './src/core/bootstrap.js'],
-      vendor: ['angular']
-    },
-    output: {
-      // note: https://github.com/webpack/webpack-dev-server/issues/88
-      // Error: Invalid path
-      path: require('path').resolve('./build'),
-      filename: '[name].js'
-    },
-    module: {
-      loaders: [
-        { test: /\.scss$/, loader: 'style!css!sass' },
-        { test: /\.css/, loader: "style!css" },
-        { test: /\.js/,
-          loader: "ng-annotate!babel?presets[]=es2015!jshint",
-          exclude: /node_module|bower_components/
-        },
-      ]
-    },
-    plugins: [
-      new webpack.HotModuleReplacementPlugin(),
-      new webpack.optimize.CommonsChunkPlugin("vendor", "vendor.bundle.js")
-    ]
-  });
-  //compiler.watch({
-  //  aggregateTimeout: 300,
-  //  poll: true
-  //}, function(err, stats){
-  //  if(err) throw new gutil.PluginError("webpack", err);
-  //  gutil.log("[webpack]", stats.toString({
-  //    // output options
-  //  }));
-  //});
-
-  // not work
+  var compiler = webpack(require('./webpack.config.js'));
   var server = new WebpackDevServer(compiler, {
     contentBase: require('path').resolve("./build"),
     hot: true,
     historyApiFallback: false,
-    //proxy: {
-    //  "*": "http://localhost:9090"
-    //},
-    //quiet: false,
-    //noInfo: false,
-    //lazy: true,
-    //filename: "bundle.js",
-    //watchOptions: {
-    //  aggregateTimeout: 300,
-    //  poll: 1000
-    //},
-    //publicPath: "/assets/",
-    //headers: {"X-Custom-Header":"yes"},
-    //stats: { color: true },
   });
   server.listen(8080, "localhost", function(err){
     if(err) throw new gutil.PluginError("webpack-dev-server", err);

@@ -2,20 +2,20 @@
 var webpack = require('webpack'),
     path = require('path');
 
-var APP = __dirname + '/src';
+//var APP = __dirname + '/src';
 
 module.exports = {
   //entry: "./src/main.js",
-  context: APP,
+  //context: APP,
   //devTool: "source-map",
   devtool: "source-map",
   entry: {
-    app: ["webpack/hot/dev-server", "./core/bootstrap.js"],
+    app: ["webpack/hot/dev-server", "./src/core/bootstrap.js"],
     vendor: ["angular"]
   },
   output: {
-    path: './build',
-    filename: "bundle.js"
+    path: path.resolve('./build'),
+    filename: "[name].bundle.js"
   },
   module: {
     loaders: [
