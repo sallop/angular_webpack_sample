@@ -1,6 +1,6 @@
 describe("A suite", function(){
   it("containt spec with an expectation", function(){
-    expect(true).toBe(true);
+    expect(true)arjs/test/spec/helloSpec.js.LOCAL.21623.js.toBe(true);
   });
 });
 
