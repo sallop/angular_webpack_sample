@@ -1,5 +1,12 @@
 // Karma configuration
-// Generated on Fri Feb 12 2016 10:34:46 GMT+0900 (JST)
+// Generated on Thu Feb 18 2016 20:50:49 GMT+0900 (JST)
+
+// Some plugin doesn't support for karma
+// It need to substitute empty array or hash.
+var webpack_config = require('./webpack.config.js');
+webpack_config.entry = {};
+webpack_config.output = {};
+webpack_config.plugins = [];
 
 module.exports = function(config) {
   config.set({
@@ -18,19 +25,34 @@ module.exports = function(config) {
       'node_modules/angular/angular.js',
       'node_modules/angular-mocks/angular-mocks.js',
       'src/index.js',
-      'test/**/*Spec.js'
+      'test/spec/*Spec.js'
     ],
 
 
     // list of files to exclude
     exclude: [
+      '**/*.swp'
     ],
-
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+      'src/index.js': ['webpack'],
+      'test/spec/*Spec.js': ['webpack']
     },
+    
+    //webpack: require('./webpack.config.js'), doesn't work
+    webpack: webpack_config,
+
+    webpackMiddleware: {
+      noInfo: true
+    },
+
+    plugins: [
+      require('karma-jasmine'),
+      require('karma-phantomjs-launcher'),
+      require('karma-webpack')
+    ],
 
 
     // test results reporter to use
@@ -58,7 +80,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
+    browsers: ['PhantomJS'],
 
 
     // Continuous Integration mode
