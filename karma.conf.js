@@ -24,8 +24,10 @@ module.exports = function(config) {
     files: [
       'node_modules/angular/angular.js',
       'node_modules/angular-mocks/angular-mocks.js',
-      'src/index.js',
+      //'src/index.js', <---- remove
       'test/spec/*Spec.js'
+      //'src/calculator.js', <----- remove or comment this
+      //'test/spec/calculatorSpec.js'
     ],
 
 
@@ -37,7 +39,8 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'src/index.js': ['webpack'],
+      //'src/index.js': ['webpack'],
+      'src/*.js': ['webpack'],
       'test/spec/*Spec.js': ['webpack']
     },
     
@@ -48,11 +51,11 @@ module.exports = function(config) {
       noInfo: true
     },
 
-    plugins: [
-      require('karma-jasmine'),
-      require('karma-phantomjs-launcher'),
-      require('karma-webpack')
-    ],
+    //plugins: [
+    //  require('karma-jasmine'),
+    //  require('karma-phantomjs-launcher'),
+    //  require('karma-webpack')
+    //],
 
 
     // test results reporter to use

@@ -1,8 +1,23 @@
+//var Point = require('../../src/index').Point;
+import {Point} from '../../src/index';
+
 describe("A suite", function(){
   it("containt spec with an expectation", function(){
-    expect(true)arjs/test/spec/helloSpec.js.LOCAL.21623.js.toBe(true);
+    expect(true).toBe(true);
   });
 });
+
+describe("A suite", function(){
+  var point;
+  beforeEach(function(){
+    point = new Point(4,2);
+  });
+
+  it("containt spec with an expectation", function(){
+    expect(true).toBe(true);
+  });
+});
+
 
 describe("A suite is just a function", function(){
   var a;
